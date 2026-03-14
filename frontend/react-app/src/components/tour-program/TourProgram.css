@@ -1,0 +1,80 @@
+/* #region Program */
+
+.program-title{
+    margin-top: 20px;
+    margin-bottom: 30px;
+
+    font-weight: 400;
+    line-height: 28px;
+    font-size: 24px;
+}
+
+.day{
+    margin-top: 23px;
+    margin-bottom: 23px;
+}
+
+.circle-badge{
+    width: 48px;
+    height: 48px;
+    
+    border-radius: 50%;
+    background-color: #000;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Стиль текста */
+    color: #fff;
+    font-size: 18px;           /* Подберите под длину текста */
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+}
+
+.day-number{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+
+    font-weight: 400;
+    line-height: 24px;
+    font-size: 20px;
+}
+
+.day-events{
+    border-left: 2px solid #d9d9d9;
+    margin-left: 24px;
+    margin-top: 10px;
+
+    font-weight: 400;
+    line-height: 24px;
+    font-size: 16px;
+}
+
+.day-events ul{
+    margin-left: 20px;
+    padding-left: 20px;
+}
+
+.day-events ul li {
+    position: relative;           /* Для позиционирования ::before */
+    margin-bottom: 8px;           /* Расстояние между пунктами */
+}
+
+.day-events ul li::before{
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: 8px;
+    left: -20px;
+    
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #d9d9d9;
+}
+
+/* #endregion Program */

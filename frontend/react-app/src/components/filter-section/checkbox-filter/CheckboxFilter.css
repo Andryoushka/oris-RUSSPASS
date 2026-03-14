@@ -1,0 +1,47 @@
+/* CheckboxFilter.css */
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.checkbox-item::before {
+    content: '';
+    width: 24px;
+    height: 24px;
+    border: 2px solid #D1D5DB;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.checkbox-input:checked + .checkbox-item::before,
+.checkbox-item:has(.checkbox-input:checked)::before {
+    background-color: #FCD34D;
+    border-color: #FCD34D;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: 14px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.checkbox-item span {
+    font-size: 16px;
+    color: #1F2937;
+    font-weight: 400;
+}
+
+/* Hover эффект */
+.checkbox-item:hover::before {
+    border-color: #9CA3AF;
+}

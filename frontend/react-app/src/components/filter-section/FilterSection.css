@@ -1,0 +1,22 @@
+.filter-section
+{
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.fs-title
+{
+  display: flex;
+  margin-bottom: 15px;
+  margin-top: 20px;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+}
+
+.fs-options
+{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

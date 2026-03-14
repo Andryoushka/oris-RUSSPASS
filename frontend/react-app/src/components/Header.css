@@ -1,0 +1,50 @@
+.header-body
+{
+    padding: 12px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.header-items
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-leftSection
+{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-rightSection
+{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-button
+{
+    display: flex;
+    align-items: center;
+    height: 48px;
+    padding: 0 12px;
+}
+
+.header-separator
+{
+    background-color: #d9d9d9;
+    width: 2px;
+    height: 28px;
+    border-radius: 2px;
+    margin: 0 16px;
+}
+
+.button-doubleElement
+{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

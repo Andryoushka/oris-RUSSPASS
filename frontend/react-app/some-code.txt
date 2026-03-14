@@ -1,0 +1,13 @@
+front/back in GIT
+
+RUSSPASS.API
+
+folder data - dataseed
+
+перенести фронт в папку API Static class dataseed
+
+подключить к проекту swager
+
+добавить контроллеры для: получения списка туров, фильтров, информации о фильтрах
+
+протестировать в сваггере

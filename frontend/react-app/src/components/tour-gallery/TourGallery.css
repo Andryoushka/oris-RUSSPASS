@@ -1,0 +1,34 @@
+/* #region Gallery */
+
+.tour-gallery{
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(1, 408px);
+    gap: 20px;
+
+    padding-bottom: 20px;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.image-item{
+    overflow: hidden;
+    border-radius: 16px;
+    width: 100%;
+    height: 408px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;        /* Заполняет контейнер, обрезая лишнее */
+    object-position: center;  /* Центрирует изображение внутри */
+    display: block;           /* Убирает лишние отступы снизу */
+}
+
+/* #endregion */
