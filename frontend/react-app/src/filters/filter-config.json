@@ -1,0 +1,48 @@
+[
+    {
+        "section_id": "popular_filter",
+        "title": "Популярные",
+        "icon": "/src/assets/svg/popular.svg",
+        "input_type": "checkbox",
+        "options": [
+            "2_nights",
+            "golden_ring",
+            "with_accommodation"
+        ]
+    },
+    {
+        "section_id": "special_filter",
+        "title": "Особенности",
+        "icon": "/src/assets/svg/special.svg",
+        "input_type": "checkbox",
+        "options": [
+            "for_children",
+            "cheap_tours",
+            "weekend_tours",
+            "with_meals",
+            "with_flight",
+            "with_accommodation"
+        ]
+    },
+    {
+        "section_id": "type_filter",
+        "title": "Тип",
+        "icon": "/src/assets/svg/type.svg",
+        "input_type": "checkbox",
+        "options": [
+            "group_tours",
+            "individual_tours",
+            "bus_tours",
+            "main_attractions",
+            "thematic_tours",
+            "history_tours",
+            "author_tours",
+            "educational_travel",
+            "educational_tours",
+            "event_tours",
+            "ethno_tours",
+            "food_tours",
+            "golden_ring"
+        ]
+    }
+]

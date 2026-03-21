@@ -1,0 +1,504 @@
+front/back in GIT
+
+RUSSPASS.API
+
+folder data - dataseed
+
+перенести фронт в папку API Static class dataseed
+
+подключить к проекту swager
+
+добавить контроллеры для: получения списка туров, фильтров, информации о фильтрах
+
+протестировать в сваггере
+
+добавить в get метод списка логику фильтрации
+
+-----------------------------------------------------------------------
+
+import './Home.css';
+import { TOUR_FEATURES, HOTEL_STARS, DURATIONS } from '../../../enum/tour-enums.js';
+import YellowButton from '../../../ui/YellowButton.jsx';
+import TourCard from '../../tour-card/TourCard.jsx';
+import { useSearchParams } from 'react-router';
+import { useEffect, useState, useMemo } from 'react';
+import { useTours } from '../../../../src/context/TourContext.jsx'
+import FilterSection from '../../filter-section/FilterSection.jsx';
+import CheckboxFilter from '../../filter-section/checkbox-filter/CheckboxFilter.jsx';
+
+import filter_tags from '../../../filters/filter-tags.json'
+import filter_config from '../../../filters/filter-config.json'
+
+function Home(){
+    const { tours, loading } = useTours();
+
+    const [searchQuery, setSearchQuery] = useState("");
+
+    // 🔹 Обработчик ввода
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+
+    const [tourFilters, setTourFilters] = useState({
+        // Продолжительность
+        twoNights: false,
+        threeNights: false,
+        fourNights: false,
+        fiveNights: false,
+        sixNights: false,
+        sevenNights: false,
+        sevenMoreNights: false,
+        oneDay: false,
+        
+        // Категории отеля
+        withoutStars: false,
+        twoStars: false,
+        threeStars: false,
+        fourStars: false,
+        
+        // Популярное
+        goldenRing: false,
+        withAccommodation: false,
+        ecoTours: false,
+        
+        // Особенности
+        withFlight: false,           // С перелетом
+        withMeals: false,            // С питанием
+        weekendTours: false,         // Туры выходного дня
+        cheapTours: false,           // Недорогие туры
+        forChildren: false,          // Детям
+        
+        // Тип
+        groupTours: false,           // Групповые
+        individualTours: false,      // Индивидуальные
+        busTours: false,             // Автобусные
+        mainAttractions: false,      // По главным достопримечательностям
+        thematicTours: false,        // Тематические
+        historyTours: false,         // История
+        authorTours: false,          // Авторские
+        educationalTravel: false,    // Для познавательных путешествий
+        educationalTours: false,     // Образовательные
+        eventTours: false,           // Событийные
+        ethnoTours: false,           // Этнотуры
+        foodTours: false,            // Еда
+        
+        // Бюджет
+        budget: {
+            min: 0,
+            max: 100000
+        }
+    });
+
+    // 1. Создаем универсальную функцию-обработчик
+    const handleFiltersChange = (e) => {
+        const { name, checked } = e.target; // Берем имя и состояние из события
+        
+        setTourFilters(prev => ({
+            ...prev,
+            [name]: checked // Динамически обновляем нужное поле по имени
+        }));
+    };
+
+    // 🔹 Фильтрация туров по всем критериям
+    const applyFilters = (tours, filters, searchQuery) => {
+        return tours.filter(tour => {
+            // 🟡 Поиск по названию
+            if (searchQuery.trim() && !tour.name?.toLowerCase().includes(searchQuery.toLowerCase())) {
+                return false;
+            }
+
+            // 🟡 Популярное (сверяем с TOUR_FEATURES)
+            if (filters.goldenRing && !tour.features?.includes(TOUR_FEATURES.GOLDEN_RING)) return false;
+            if (filters.ecoTours && !tour.features?.includes(TOUR_FEATURES.ECO_TOURS)) return false;
+            if (filters.withAccommodation && !tour.features?.includes(TOUR_FEATURES.WITH_ACCOMMODATION)) return false;
+
+            // 🟡 Продолжительность
+            if (filters.oneDay && tour.duration !== DURATIONS.ONE_DAY) return false;
+            if (filters.twoNights && tour.duration !== DURATIONS.TWO) return false;
+            if (filters.threeNights && tour.duration !== DURATIONS.THREE) return false;
+            if (filters.fourNights && tour.duration !== DURATIONS.FOUR) return false;
+            if (filters.fiveNights && tour.duration !== DURATIONS.FIVE) return false;
+            if (filters.sixNights && tour.duration !== DURATIONS.SIX) return false;
+            if (filters.sevenNights && tour.duration !== DURATIONS.SEVEN) return false;
+            if (filters.sevenMoreNights && tour.duration < DURATIONS.SEVEN) return false; // 8+ ночей
+
+            // 🟡 Особенности
+            if (filters.withFlight && !tour.features?.includes(TOUR_FEATURES.WITH_FLIGHT)) return false;
+            if (filters.withMeals && !tour.features?.includes(TOUR_FEATURES.WITH_MEALS)) return false;
+            if (filters.weekendTours && !tour.features?.includes(TOUR_FEATURES.WEEKEND_TOURS)) return false;
+            if (filters.cheapTours && tour.price > 5000) return false; // порог "недорогих"
+            if (filters.forChildren && !tour.features?.includes(TOUR_FEATURES.FOR_CHILDREN)) return false;
+
+            // 🟡 Тип тура
+            if (filters.groupTours && !tour.features?.includes(TOUR_FEATURES.GROUP_TOURS)) return false;
+            if (filters.individualTours && !tour.features?.includes(TOUR_FEATURES.INDIVIDUAL_TOURS)) return false;
+            if (filters.busTours && !tour.features?.includes(TOUR_FEATURES.BUS_TOURS)) return false;
+            if (filters.mainAttractions && !tour.features?.includes(TOUR_FEATURES.MAIN_ATTRACTIONS)) return false;
+            if (filters.thematicTours && !tour.features?.includes(TOUR_FEATURES.THEMATIC_TOURS)) return false;
+            if (filters.historyTours && !tour.features?.includes(TOUR_FEATURES.HISTORY_TOURS)) return false;
+            if (filters.authorTours && !tour.features?.includes(TOUR_FEATURES.AUTHOR_TOURS)) return false;
+            if (filters.educationalTravel && !tour.features?.includes(TOUR_FEATURES.EDUCATIONAL_TRAVEL)) return false;
+            if (filters.educationalTours && !tour.features?.includes(TOUR_FEATURES.EDUCATIONAL_TOURS)) return false;
+            if (filters.eventTours && !tour.features?.includes(TOUR_FEATURES.EVENT_TOURS)) return false;
+            if (filters.ethnoTours && !tour.features?.includes(TOUR_FEATURES.ETHNO_TOURS)) return false;
+            if (filters.foodTours && !tour.features?.includes(TOUR_FEATURES.FOOD_TOURS)) return false;
+
+            // 🟡 Категории отеля (звёзды)
+            // Если выбран фильтр "без звёзд" — показываем только туры с hotelStars === 0
+            if (filters.withoutStars && tour.hotelStars !== HOTEL_STARS.NONE) return false;
+            if (filters.twoStars && tour.hotelStars !== HOTEL_STARS.TWO) return false;
+            if (filters.threeStars && tour.hotelStars !== HOTEL_STARS.THREE) return false;
+            if (filters.fourStars && tour.hotelStars !== HOTEL_STARS.FOUR) return false;
+
+            // 🟡 Бюджет (диапазон)
+            if (tour.price < filters.budget.min || tour.price > filters.budget.max) return false;
+
+            return true; // все фильтры пройдены
+        });
+    };
+
+    const filteredTours = useMemo(() => {
+        if (loading) return [];
+        return applyFilters(tours, tourFilters, searchQuery);
+    }, [tours, tourFilters, loading, searchQuery]);
+
+    // 🔹 ОТЛАДКА: раскомментируйте для проверки
+    console.log('📦 Tours:', tours);
+    console.log('🔍 Filters:', tourFilters);
+    console.log('✅ Filtered count:', filteredTours.length);
+    // console.log('filter-tags' , filter_tags['two_nights'])
+    if (tours.length > 0 && filteredTours.length === 0) {
+        console.log('❌ Все туры отфильтрованы! Проверьте структуру данных.');
+        console.log('Пример тура:', tours[0]);
+    }
+
+    return(
+        <div className='home-body'>
+
+            <div className='catalog-path'>
+                <ul className='catalog-list'>
+                    <li className='catalog-item'>
+                        <a href="">Главная</a>
+                    </li>
+                    <li className='catalog-item'>
+                        <a href="">Туры</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div className='catalog-title'>
+                Туры
+            </div>
+
+            <div className='search-body'>
+                <div className='search-section'>
+
+                    <input className='searchInput'
+                        type="text" 
+                        placeholder='Найти тур или город...'
+                        value={searchQuery}           // ← контролируемый инпут
+                        onChange={handleSearchChange}  // ← обновление стейта
+                    />
+
+                    <div className='date-picker'>
+                        <img src="/src/assets/svg/calendar.svg" alt="" />
+                        <span>Дата</span>
+                    </div>
+
+                    <YellowButton text={"Найти"}/>
+
+                </div>
+            </div>
+
+            <div className='tour-wrapper'>
+                <div className='tour-filter'>
+                    <div className='filter-title'>
+                        Фильтры
+                    </div>
+
+                    {
+                        filter_config.map((item) => {
+                            if (item.input_type === 'checkbox')
+                            {
+                                return (
+                                    <FilterSection
+                                        title={item.title}
+                                        icon={item.icon}
+                                    >
+                                        {
+                                            item.options.map((option) =>{
+                                                const cf = filter_tags[option];
+                                                
+                                                return (
+                                                <CheckboxFilter
+                                                    name={cf.name}
+                                                    label={cf.label}
+                                                    checked={tourFilters.twoNights}
+                                                    onChange={handleFiltersChange}
+                                                />
+                                                )
+                                            }
+                                        )
+                                        }
+                                    </FilterSection>
+                                )
+                            }
+                        })
+                    }
+
+                    <FilterSection
+                        title={"Популярное"}
+                        icon={"/src/assets/svg/popular.svg"}
+                    >
+                        <CheckboxFilter
+                            name={"twoNights"}
+                            label={"2 ночи"}
+                            checked={tourFilters.twoNights}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"goldenRing"}
+                            label={"Золотое кольцо"}
+                            checked={tourFilters.goldenRing}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"ecoTours"}
+                            label={"Экотуры"}
+                            checked={tourFilters.ecoTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"withAccommodation"}
+                            label={"С проживанием"}
+                            checked={tourFilters.withAccommodation}
+                            onChange={handleFiltersChange}
+                        />
+                    </FilterSection>
+
+                    <FilterSection
+                        title={"Особенности"}
+                        icon={"/src/assets/svg/special.svg"}
+                    >
+                        <CheckboxFilter
+                            name={"withFlight"}
+                            label={"С перелетом"}
+                            checked={tourFilters.withFlight}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"withAccommodation"}
+                            label={"С проживанием"}
+                            checked={tourFilters.withAccommodation}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"withMeals"}
+                            label={"С питанием"}
+                            checked={tourFilters.withMeals}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"weekendTours"}
+                            label={"Туры выходного дня"}
+                            checked={tourFilters.weekendTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"cheapTours"}
+                            label={"Недорогие туры"}
+                            checked={tourFilters.cheapTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"forChildren"}
+                            label={"Детям"}
+                            checked={tourFilters.forChildren}
+                            onChange={handleFiltersChange}
+                        />
+                    </FilterSection>
+
+                    <FilterSection
+                        title={"Продолжительность"}
+                        icon={"/src/assets/svg/night.svg"}
+                    >
+                        <CheckboxFilter
+                            name={"twoNights"}
+                            label={"2 ночи"}
+                            checked={tourFilters.twoNights}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"threeNights"}
+                            label={"3 ночи"}
+                            checked={tourFilters.threeNights}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"fourNights"}
+                            label={"4 ночи"}
+                            checked={tourFilters.fourNights}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"fiveNights"}
+                            label={"5 ночей"}
+                            checked={tourFilters.fiveNights}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"sixNights"}
+                            label={"6 ночей"}
+                            checked={tourFilters.sixNights}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"sevenNights"}
+                            label={"7 ночей"}
+                            checked={tourFilters.sevenNights}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"sevenMoreNights"}
+                            label={"более 7 ночей"}
+                            checked={tourFilters.sevenMoreNights}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"oneDay"}
+                            label={"один день"}
+                            checked={tourFilters.oneDay}
+                            onChange={handleFiltersChange}
+                        />
+                    </FilterSection>
+
+                    <FilterSection
+                        title={"Тип"}
+                        icon={"/src/assets/svg/type.svg"}
+                    >
+                        <CheckboxFilter
+                            name={"groupTours"}
+                            label={"Групповые"}
+                            checked={tourFilters.groupTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"individualTours"}
+                            label={"Индивидуальные"}
+                            checked={tourFilters.individualTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"busTours"}
+                            label={"Автобусные"}
+                            checked={tourFilters.busTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"mainAttractions"}
+                            label={"По главным достопримечательностям"}
+                            checked={tourFilters.mainAttractions}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"thematicTours"}
+                            label={"Тематические"}
+                            checked={tourFilters.thematicTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"historyTours"}
+                            label={"История"}
+                            checked={tourFilters.historyTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"authorTours"}
+                            label={"Авторские"}
+                            checked={tourFilters.authorTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"educationalTravel"}
+                            label={"Для познавательных путешествий"}
+                            checked={tourFilters.educationalTravel}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"educationalTours"}
+                            label={"Образовательные"}
+                            checked={tourFilters.educationalTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"eventTours"}
+                            label={"Событийные"}
+                            checked={tourFilters.eventTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"ethnoTours"}
+                            label={"Этнотуры"}
+                            checked={tourFilters.ethnoTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"ecoTours"}
+                            label={"Экотуры"}
+                            checked={tourFilters.ecoTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"foodTours"}
+                            label={"Еда"}
+                            checked={tourFilters.foodTours}
+                            onChange={handleFiltersChange}
+                        />
+                        <CheckboxFilter
+                            name={"goldenRing"}
+                            label={"Золотое кольцо"}
+                            checked={tourFilters.goldenRing}
+                            onChange={handleFiltersChange}
+                        />
+                    </FilterSection>
+
+                </div>
+
+                <div className='tour-events'>
+
+                    <div className='tour-category'>
+                        <img src="/src/assets/svg/category.svg" alt="" />
+                        <span>Популярные</span>
+                        <img src="/src/assets/svg/other.svg" alt="" />
+                    </div>
+
+                    <div className='tour-grid'>
+                        {
+                            loading ? (
+                            <div>Загрузка туров...</div>
+                        ) : filteredTours.length > 0 ? (
+                            filteredTours.map((item, index) => (
+                                <TourCard 
+                                    data={item} 
+                                    index={index}
+                                    key={item.id || index}  // ← лучше использовать уникальный id
+                                />
+                            ))
+                        ) : (
+                            <div className='no-results'>
+                                😕 Туры не найдены по запросу "{searchQuery}"
+                            </div>
+                        )
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    );
+}
+
+export default Home

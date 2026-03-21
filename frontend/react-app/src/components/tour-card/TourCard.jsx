@@ -1,12 +1,11 @@
-import { useNavigate } from 'react-router-dom'; // ✅ импортируем хук
+import { useNavigate } from 'react-router-dom';
 import YellowButton from '../../ui/YellowButton.jsx';
 import './TourCard.css'
 
 function TourCard({ data, index })
 {
-    const navigate = useNavigate(); // ✅ хук для навигации
+    const navigate = useNavigate();
     const handleBookClick = () => {
-            // ✅ Переход на страницу тура по индексу
             navigate(`/tours?id=${index}`);
         };
     let tour_features = data.features.join(", ");
@@ -15,7 +14,7 @@ function TourCard({ data, index })
         <div className='tour-card'>
             <div className='card-image'>
                 <img className='tour-image'
-                    src={data.card_image} alt="" />
+                    src={data.cardImage} alt="" />
             </div>
             <div className='card-content'>
                 <div className='card-description'>

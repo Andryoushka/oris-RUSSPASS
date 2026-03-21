@@ -1,0 +1,107 @@
+{
+    "2_nights": {
+        "name": "2_nights",
+        "label": "2 ночи",
+        "tour_prop" : "features"
+    },
+    "golden_ring": {
+        "name": "golden_ring",
+        "label": "Золотое кольцо",
+        "tour_prop": "features"
+    },
+    "eco_tours": {
+        "name": "eco_tours",
+        "label": "Экотуры",
+        "tour_prop": "features"
+    },
+    "with_accommodation": {
+        "name": "with_accommodation",
+        "label": "С проживанием",
+        "tour_prop": "features"
+    },
+    "with_flight": {
+        "name": "with_flight",
+        "label": "С перелётом",
+        "tour_prop": "features"
+    },
+    "with_meals": {
+        "name": "with_meals",
+        "label": "С питанием",
+        "tour_prop": "features"
+    },
+    "weekend_tours": {
+        "name": "weekend_tours",
+        "label": "Туры выходного дня",
+        "tour_prop": "features"
+    },
+    "cheap_tours": {
+        "name": "cheap_tours",
+        "label": "Бюджетные туры",
+        "tour_prop": "features"
+    },
+    "for_children": {
+        "name": "for_children",
+        "label": "Для детей",
+        "tour_prop": "features"
+    },
+    "group_tours": {
+        "name": "group_tours",
+        "label": "Групповые туры",
+        "tour_prop": "features"
+    },
+    "individual_tours": {
+        "name": "individual_tours",
+        "label": "Индивидуальные туры",
+        "tour_prop": "features"
+    },
+    "bus_tours": {
+        "name": "bus_tours",
+        "label": "Автобусные туры",
+        "tour_prop": "features"
+    },
+    "main_attractions": {
+        "name": "main_attractions",
+        "label": "Главные достопримечательности",
+        "tour_prop": "features"
+    },
+    "thematic_tours": {
+        "name": "thematic_tours",
+        "label": "Тематические туры",
+        "tour_prop": "features"
+    },
+    "history_tours": {
+        "name": "history_tours",
+        "label": "Исторические туры",
+        "tour_prop": "features"
+    },
+    "author_tours": {
+        "name": "author_tours",
+        "label": "Авторские туры",
+        "tour_prop": "features"
+    },
+    "educational_travel": {
+        "name": "educational_travel",
+        "label": "Образовательные путешествия",
+        "tour_prop": "features"
+    },
+    "educational_tours": {
+        "name": "educational_tours",
+        "label": "Образовательные туры",
+        "tour_prop": "features"
+    },
+    "event_tours": {
+        "name": "event_tours",
+        "label": "Событийные туры",
+        "tour_prop": "features"
+    },
+    "ethno_tours": {
+        "name": "ethno_tours",
+        "label": "Этнотуры",
+        "tour_prop": "features"
+    },
+    "food_tours": {
+        "name": "food_tours",
+        "label": "Гастрономические туры",
+        "tour_prop": "features"
+    }
+}
